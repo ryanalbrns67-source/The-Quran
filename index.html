@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="موقع قرآن كريم للقراءة والاستماع والأذكار والتفسير ومواقيت الصلاة">
+  <title>القرآن الكريم</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-icon">☪</div>
+    <div>
+      <h1>القرآن الكريم</h1>
+      <p>اقرأ • استمع • تدبر</p>
+    </div>
+  </div>
+</header>
+
+<nav class="main-nav" aria-label="التنقل الرئيسي">
+  <button data-section="home" onclick="showHome()">🏠 الرئيسية</button>
+  <button data-section="surahs" onclick="showSurahs()">📖 السور</button>
+  <button data-section="quranSearch" onclick="showQuranSearch()">🔎 بحث القرآن</button>
+  <button data-section="prayerTimes" onclick="showPrayerTimes()">🕌 الصلاة</button>
+  <button data-section="azkar" onclick="showAzkar()">📿 الأذكار</button>
+  <button data-section="tafsir" onclick="showTafsir()">📚 التفسير</button>
+  <button data-section="favorites" onclick="showFavorites()">⭐ المفضلة</button>
+  <button data-section="settings" onclick="showSettings()">⚙️ الإعدادات</button>
+  <button onclick="toggleDarkMode()">🌙 الوضع الليلي</button>
+</nav>
+
+<main>
+
+  <section id="home" class="section active-section">
+    <div class="hero card">
+      <h2>بسم الله الرحمن الرحيم</h2>
+      <p>مصحف إلكتروني بسيط وسريع للقراءة والاستماع والتدبر.</p>
+      <button class="primary-btn" onclick="showSurahs()">📖 ابدأ القراءة</button>
+    </div>
+
+    <div id="lastReading" class="card"></div>
+
+    <div class="card">
+      <div class="section-title">
+        <div>
+          <h2>السور</h2>
+          <p>ابحث عن السورة التي تريد قراءتها.</p>
+        </div>
+      </div>
+      <div class="search-row">
+        <input id="searchInput" type="search" placeholder="ابحث باسم السورة..." oninput="searchSurahs()">
+      </div>
+      <div id="surahList" class="surah-grid"></div>
+    </div>
+  </section>
+
+  <section id="reader" class="section" hidden>
+    <div class="reader-top card">
+      <button onclick="showSurahs()">← العودة للسور</button>
+      <h2 id="surahTitle">سورة</h2>
+      <div class="reader-tools">
+        <button onclick="changeFontSize(-2)">A-</button>
+        <button onclick="resetFontSize()">A</button>
+        <button onclick="changeFontSize(2)">A+</button>
+        <button onclick="playCurrentSurah()">▶️ تشغيل</button>
+        <button onclick="pauseAudio()">⏸️ إيقاف</button>
+      </div>
+    </div>
+    <audio id="quranAudio" controls preload="none"></audio>
+    <div id="quranText" class="quran-text card">اختر سورة للقراءة.</div>
+  </section>
+
+  <section id="favorites" class="section" hidden>
+    <div class="card section-title"><div><h2>⭐ المفضلة</h2><p>الآيات التي حفظتها.</p></div></div>
+    <div id="favoritesList" class="favorites-list"></div>
+  </section>
+
+  <section id="quranSearch" class="section" hidden>
+    <div class="card">
+      <div class="section-title"><div><h2>🔎 البحث في القرآن</h2><p>اكتب كلمة أو عبارة للبحث.</p></div></div>
+      <div class="search-row">
+        <input id="quranSearchInput" type="search" placeholder="مثال: الصبر" onkeydown="if(event.key==='Enter') searchQuran()">
+        <button class="primary-btn" onclick="searchQuran()">بحث</button>
+      </div>
+      <div id="quranSearchResults" class="results"></div>
+    </div>
+  </section>
+
+  <section id="prayerTimes" class="section" hidden>
+    <div class="card">
+      <div class="section-title"><div><h2>🕌 مواقيت الصلاة</h2><p>أدخل المدينة والدولة يدويًا.</p></div></div>
+      <div class="search-row">
+        <input id="prayerCity" type="text" placeholder="المدينة: الدمام">
+        <input id="prayerCountry" type="text" placeholder="الدولة: Saudi Arabia">
+        <button class="primary-btn" onclick="loadPrayerTimes()">عرض المواقيت</button>
+      </div>
+      <div id="prayerResult" class="prayer-grid"></div>
+      <p class="muted">يمكن أن تختلف المواقيت قليلًا حسب طريقة الحساب والضبط المحلي.</p>
+    </div>
+  </section>
+
+  <section id="azkar" class="section" hidden>
+    <div class="card section-title"><div><h2>📿 الأذكار</h2><p>أذكار مختارة مع عداد لكل ذكر.</p></div></div>
+    <div id="azkarList" class="azkar-grid"></div>
+  </section>
+
+  <section id="tafsir" class="section" hidden>
+    <div class="card">
+      <div class="section-title"><div><h2>📚 التفسير</h2><p>أدخل رقم السورة والآية.</p></div></div>
+      <div class="search-row">
+        <input id="tafsirSurah" type="number" min="1" max="114" placeholder="رقم السورة">
+        <input id="tafsirAyah" type="number" min="1" placeholder="رقم الآية">
+        <button class="primary-btn" onclick="loadTafsir()">عرض التفسير</button>
+      </div>
+      <div id="tafsirResult" class="results"></div>
+    </div>
+  </section>
+
+  <section id="settings" class="section" hidden>
+    <div class="card section-title"><div><h2>⚙️ الإعدادات</h2><p>تحكم في مظهر التطبيق وحجم الخط.</p></div></div>
+    <div class="settings-grid">
+      <div class="card setting-card">
+        <h3>حجم خط القرآن</h3>
+        <div class="reader-tools">
+          <button onclick="changeFontSize(-2)">A-</button>
+          <button onclick="resetFontSize()">إعادة</button>
+          <button onclick="changeFontSize(2)">A+</button>
+        </div>
+      </div>
+      <div class="card setting-card">
+        <h3>المظهر</h3>
+        <button class="primary-btn" onclick="toggleDarkMode()">🌙 تبديل الوضع الليلي</button>
+      </div>
+      <div class="card setting-card danger-card">
+        <h3>حذف البيانات</h3>
+        <p>يحذف المفضلة وآخر موضع وحجم الخط والإعدادات المحفوظة.</p>
+        <button class="danger-btn" onclick="clearAppData()">🗑️ حذف البيانات</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>القرآن الكريم — صدقة جارية بإذن الله</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
