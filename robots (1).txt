@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ryanalbrns67-source.github.io/The-Quran/sitemap.xml
